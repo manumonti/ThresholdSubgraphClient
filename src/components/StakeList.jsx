@@ -1,0 +1,54 @@
+import React from 'react';
+import {
+  useQuery,
+  gql
+} from "@apollo/client";
+import { StakeItem } from './StakeItem';
+
+export function StakeList({ ownerAddress, timestamp }) {
+
+  const STAKERS_QUERY = gql`
+    query GetBonusStakes ($timestamp: String){
+      epoches(
+        orderBy: startTime
+        orderDirection: desc
+        first: 1
+        where: {startTime_lte: $timestamp}
+      ) {
+        totalStaked
+        stakes {
+          amount
+          participation
+          stakeData {
+            id
+            stakingProvider
+            owner
+            stakeType
+            authorizer
+            beneficiary
+          }
+        }
+      }
+    }
+  `;
+
+  const { loading, error, data } = useQuery(STAKERS_QUERY, {variables: {timestamp}});
+
+  if (!ownerAddress) return <div></div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error :(</div>;
+
+  const stakeList = data.epoches[0].stakes.filter((stake) => stake.stakeData.owner === ownerAddress)
+
+  if (stakeList.length === 0) {
+    return <div>No stakes for this address!</div>
+  }
+
+  return (
+    <ul>
+      {stakeList.map((stake) => (
+        <StakeItem key={stake.stakeData.id} stake={stake} />
+      ))}
+    </ul>
+  );
+}
