@@ -7,6 +7,9 @@ import { StakeItem } from './StakeItem';
 
 export function StakeList({ ownerAddress, timestamp }) {
 
+  // Todo: Max amount of items you can get in a query is 100.
+  // adding 'first: 1000' is a WA to get more than 100 stakes,
+  // but the most correct option is to use GraphQL pagination.
   const STAKERS_QUERY = gql`
     query GetBonusStakes ($timestamp: String){
       epoches(
@@ -16,7 +19,7 @@ export function StakeList({ ownerAddress, timestamp }) {
         where: {startTime_lte: $timestamp}
       ) {
         totalStaked
-        stakes {
+        stakes (first: 1000){
           amount
           participation
           stakeData {
