@@ -6,10 +6,9 @@ export function StakeItem({ stake }) {
     <div>
       <li>
         <h3>Stake:</h3>
-        <div>Staking Provider address: {stake.stakeData.stakingProvider}</div>
-        <div>Stake Type: {stake.stakeData.stakeType}</div>
+        <div>Staking Provider address: {stake.stakeData.id}</div>
         <div>Amount: {Math.round(stake.amount/Math.pow(10, 18))}</div>
-        <ElegibilityCheck stakingProvider={stake.stakeData.stakingProvider} />
+        <ElegibilityCheck stakingProvider={stake.stakeData.id} />
       </li>
     </div>
   );

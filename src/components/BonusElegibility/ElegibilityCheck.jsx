@@ -17,21 +17,26 @@ export function ElegibilityCheck({ stakingProvider }) {
   }
 `;
 
-const DELEGATION_QUERY = gql`
-query GetDelegation ($stakingProvider: String){
-  delegations(
-    where: {delegator: $stakingProvider}
-  ) {
-    delegator
-    delegate
-  }
-}
-`;
+// Since Delegation is not a requirements for bonus anymore,
+//  this query is not necessary by the moment.
+
+// const DELEGATION_QUERY = gql`
+// query GetDelegation ($stakingProvider: String){
+//   delegations(
+//     where: {delegator: $stakingProvider}
+//   ) {
+//     delegator
+//     delegate
+//   }
+// }
+// `;
 
 const { loading, error, data } = useQuery(OPERATOR_QUERY, {variables: {stakingProvider}});
-const { loading: loadingDele, error: errorDele, data: dataDele } = useQuery(DELEGATION_QUERY, {variables: {stakingProvider}});
-if (loading || loadingDele) return <div>Loading...</div>;
-if (error || errorDele) return <div>Error :(</div>;
+// const { loading: loadingDele, error: errorDele, data: dataDele } = useQuery(DELEGATION_QUERY, {variables: {stakingProvider}});
+// if (loading || loadingDele) return <div>Loading...</div>;
+if (loading) return <div>Loading...</div>
+// if (error || errorDele) return <div>Error</div>;
+if (error) return <div>Error: {error.message}</div>
 
 let operator = ''
 let operatorCheck = '❌'
@@ -41,20 +46,20 @@ if (data.confirmedOperators.length !== 0) {
   operatorCheck = '✅'
 }
 
-let delegate = ''
-let delegateCheck = '❌'
+// let delegate = ''
+// let delegateCheck = '❌'
 
-if (dataDele.delegations.length !== 0) {
-  delegate = dataDele.delegations[0].delegate
-  delegateCheck = `✅`
-}
+// if (dataDele.delegations.length !== 0) {
+//   delegate = dataDele.delegations[0].delegate
+//   delegateCheck = `✅`
+// }
 
   return (
     <div>
       <div>Elegibility checks:</div>
-      <div>✅ Staking at May 15</div>
+      <div>✅ Staking at June 1st</div>
       <div>{operatorCheck} Node operator confirmed: {operator}</div>
-      <div>{delegateCheck} Voting power delegate: {delegate}</div>
+      {/* <div>{delegateCheck} Voting power delegate: {delegate}</div> */}
       <div></div>
     </div>
   );

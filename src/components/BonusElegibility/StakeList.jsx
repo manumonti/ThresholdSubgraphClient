@@ -21,14 +21,11 @@ export function StakeList({ ownerAddress, timestamp }) {
         totalStaked
         stakes (first: 1000){
           amount
-          participation
           stakeData {
             id
-            stakingProvider
-            owner
-            stakeType
-            authorizer
-            beneficiary
+            owner {
+              id
+            }
           }
         }
       }
@@ -39,9 +36,9 @@ export function StakeList({ ownerAddress, timestamp }) {
 
   if (!ownerAddress) return <div></div>;
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error :(</div>;
+  if (error) return <div>Error {error.message}</div>;
 
-  const stakeList = data.epoches[0].stakes.filter((stake) => stake.stakeData.owner === ownerAddress)
+  const stakeList = data.epoches[0].stakes.filter((stake) => stake.stakeData.owner.id === ownerAddress)
 
   if (stakeList.length === 0) {
     return <div>No stakes for this address!</div>

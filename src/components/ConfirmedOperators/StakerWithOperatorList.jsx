@@ -14,7 +14,7 @@ export function StakerWithOperatorList( {totalStaked, stakeWithConfOpList} ) {
       </thead>
       <tbody>
         {stakeWithConfOpList.map((stake) => (
-          <StakerWithOperatorItem key={stake.stakeData.stakingProvider} totalStaked={totalStaked} stake={stake}/>
+          <StakerWithOperatorItem key={stake.stakeData.id} totalStaked={totalStaked} stake={stake}/>
         ))}
       </tbody>
     </table>

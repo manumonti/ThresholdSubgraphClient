@@ -19,8 +19,8 @@ export function StakerWithOperatorItem( {totalStaked, stake} ) {
 
   return (
     <tr>
-    <td>{stake.stakeData.stakingProvider}</td>
-    <td>{stake.stakeData.owner}</td>
+    <td>{stake.stakeData.id}</td>
+    <td>{stake.stakeData.owner.id}</td>
     <td>{convertAmount(stake.amount)}</td>
     <td>{calcPercentage(stake.amount, totalStaked)} %</td>
   </tr>
