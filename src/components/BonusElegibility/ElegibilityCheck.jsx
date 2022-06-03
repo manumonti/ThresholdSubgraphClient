@@ -4,11 +4,13 @@ import {
   gql
 } from "@apollo/client";
 
-export function ElegibilityCheck({ stakingProvider }) {
+export function ElegibilityCheck({ stakingProvider, block }) {
 
   const OPERATOR_QUERY = gql`
-  query GetOperator ($stakingProvider: String){
+  query GetOperator ($stakingProvider: String, $block: Int){
     confirmedOperators(
+      first: 1000
+      block: {number: $block}
       where: {stakingProvider: $stakingProvider}
     ) {
       stakingProvider
@@ -31,7 +33,7 @@ export function ElegibilityCheck({ stakingProvider }) {
 // }
 // `;
 
-const { loading, error, data } = useQuery(OPERATOR_QUERY, {variables: {stakingProvider}});
+const { loading, error, data } = useQuery(OPERATOR_QUERY, {variables: {stakingProvider, block}});
 // const { loading: loadingDele, error: errorDele, data: dataDele } = useQuery(DELEGATION_QUERY, {variables: {stakingProvider}});
 // if (loading || loadingDele) return <div>Loading...</div>;
 if (loading) return <div>Loading...</div>

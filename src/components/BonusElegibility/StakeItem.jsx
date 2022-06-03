@@ -1,14 +1,14 @@
 import React from 'react';
 import { ElegibilityCheck } from './ElegibilityCheck';
 
-export function StakeItem({ stake }) {
+export function StakeItem({ stake, block }) {
   return (
     <div>
       <li>
         <h3>Stake:</h3>
         <div>Staking Provider address: {stake.stakeData.id}</div>
         <div>Amount: {Math.round(stake.amount/Math.pow(10, 18))}</div>
-        <ElegibilityCheck stakingProvider={stake.stakeData.id} />
+        <ElegibilityCheck stakingProvider={stake.stakeData.id} block={block} />
       </li>
     </div>
   );

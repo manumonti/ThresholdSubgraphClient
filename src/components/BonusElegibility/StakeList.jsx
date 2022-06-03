@@ -5,7 +5,7 @@ import {
 } from "@apollo/client";
 import { StakeItem } from './StakeItem';
 
-export function StakeList({ ownerAddress, timestamp }) {
+export function StakeList({ ownerAddress, timestamp, block }) {
 
   // Todo: Max amount of items you can get in a query is 100.
   // adding 'first: 1000' is a WA to get more than 100 stakes,
@@ -47,7 +47,7 @@ export function StakeList({ ownerAddress, timestamp }) {
   return (
     <ul>
       {stakeList.map((stake) => (
-        <StakeItem key={stake.stakeData.id} stake={stake} />
+        <StakeItem key={stake.stakeData.id} stake={stake} block={block} />
       ))}
     </ul>
   );

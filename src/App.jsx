@@ -18,6 +18,7 @@ const gplClient = new ApolloClient({
 });
 
 const TIMESTAMP = "1654041600" // Jun 1 2022 00:00:00 GMT
+const BLOCK = 14881677 // The first mined block after TIMESTAMP
 
 export function App() {
   const stakingAddressRef = useRef();
@@ -35,9 +36,9 @@ export function App() {
         <h1>Bonus Elegibility (June 1st)</h1>
         <input ref={stakingAddressRef} type="text" size="42" placeholder="Staking address (owner)" />
         <button onClick={handleStakingCheck}>Check</button>
-        <StakeList ownerAddress={ownerAddress} timestamp={TIMESTAMP}/>
+        <StakeList ownerAddress={ownerAddress} timestamp={TIMESTAMP} block={BLOCK}/>
         <h1>Stakers with confirmed operator (June 1st)</h1>
-        <ConfirmedOperatorsData timestamp={TIMESTAMP}/>
+        <ConfirmedOperatorsData timestamp={TIMESTAMP} block={BLOCK}/>
       </ApolloProvider>
     </Fragment>
   );

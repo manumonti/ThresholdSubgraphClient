@@ -7,7 +7,7 @@ import {
 } from "@apollo/client";
 import { StakerWithOperatorList } from './StakerWithOperatorList';
 
-export function ConfirmedOperatorsData({ timestamp }) {
+export function ConfirmedOperatorsData({ timestamp, block }) {
 
   const [showState, setShowState] = useState(false);
 
@@ -41,18 +41,18 @@ export function ConfirmedOperatorsData({ timestamp }) {
   `;
 
   const OPERATOR_QUERY = gql`
-  query GetOperators {
-    confirmedOperators (first: 1000) {
-      stakingProvider
+    query GetOperators ($block: Int){
+      confirmedOperators (first: 1000, block: {number: $block}) {
+        stakingProvider
+      }
     }
-  }
   `;
 
   const { loading, error, data } = useQuery(STAKERS_QUERY, {variables: {timestamp}});
-  const { loading: loadingOp, error: errorOp, data: dataOp } = useQuery(OPERATOR_QUERY);
+  const { loading: loadingOp, error: errorOp, data: dataOp } = useQuery(OPERATOR_QUERY, {variables: {block}});
 
   if (loading || loadingOp) return <div>Loading...</div>;
-  if (error || errorOp ) return <div>Error :(</div>;
+  if (error || errorOp ) return <div>Error: {error.message} {errorOp.message}</div>;
 
   // Stake list from Staking events
   const stakeList = data.epoches[0].stakes
