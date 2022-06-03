@@ -1,7 +1,7 @@
-import React from 'react';
-import { StakerWithOperatorItem } from './StakerWithOperatorItem';
+import React from "react";
+import { StakerWithOperatorItem } from "./StakerWithOperatorItem";
 
-export function StakerWithOperatorList( {totalStaked, stakeWithConfOpList} ) {
+export function StakerWithOperatorList({ totalStaked, stakeWithConfOpList }) {
   return (
     <table border="1px">
       <thead>
@@ -14,9 +14,13 @@ export function StakerWithOperatorList( {totalStaked, stakeWithConfOpList} ) {
       </thead>
       <tbody>
         {stakeWithConfOpList.map((stake) => (
-          <StakerWithOperatorItem key={stake.stakeData.id} totalStaked={totalStaked} stake={stake}/>
+          <StakerWithOperatorItem
+            key={stake.stakeData.id}
+            totalStaked={totalStaked}
+            stake={stake}
+          />
         ))}
       </tbody>
     </table>
-  )
+  );
 }
