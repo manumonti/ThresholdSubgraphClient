@@ -1,5 +1,5 @@
-import React from "react";
-import { StakerWithOperatorItem } from "./StakerWithOperatorItem";
+import React from "react"
+import { StakerWithOperatorItem } from "./StakerWithOperatorItem"
 
 export function StakerWithOperatorList({ totalStaked, stakeWithConfOpList }) {
   return (
@@ -22,5 +22,5 @@ export function StakerWithOperatorList({ totalStaked, stakeWithConfOpList }) {
         ))}
       </tbody>
     </table>
-  );
+  )
 }

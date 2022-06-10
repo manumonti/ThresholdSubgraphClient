@@ -1,26 +1,26 @@
-import React from "react";
-import { Fragment, useState, useRef } from "react";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { StakeList } from "./components/BonusElegibility/StakeList";
-import { ConfirmedOperatorsData } from "./components/ConfirmedOperators/ConfirmedOperatorsData";
+import React from "react"
+import { Fragment, useState, useRef } from "react"
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
+import { StakeList } from "./components/BonusElegibility/StakeList"
+import { ConfirmedOperatorsData } from "./components/ConfirmedOperators/ConfirmedOperatorsData"
 
 const gplClient = new ApolloClient({
   uri: "https://api.studio.thegraph.com/query/24143/threshold/0.0.4",
   cache: new InMemoryCache(),
-});
+})
 
-const TIMESTAMP = "1654041600"; // Jun 1 2022 00:00:00 GMT
-const BLOCK = 14881677; // The first mined block after TIMESTAMP
+const TIMESTAMP = "1654041600" // Jun 1 2022 00:00:00 GMT
+const BLOCK = 14881677 // The first mined block after TIMESTAMP
 
 export function App() {
-  const stakingAddressRef = useRef();
-  const [ownerAddress, setOwnerAddress] = useState("");
+  const stakingAddressRef = useRef()
+  const [ownerAddress, setOwnerAddress] = useState("")
 
   const handleStakingCheck = () => {
-    const address = stakingAddressRef.current.value;
-    if (address === "") return;
-    setOwnerAddress(address.toLowerCase());
-  };
+    const address = stakingAddressRef.current.value
+    if (address === "") return
+    setOwnerAddress(address.toLowerCase())
+  }
 
   return (
     <Fragment>
@@ -42,5 +42,5 @@ export function App() {
         <ConfirmedOperatorsData timestamp={TIMESTAMP} block={BLOCK} />
       </ApolloProvider>
     </Fragment>
-  );
+  )
 }

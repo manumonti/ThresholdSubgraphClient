@@ -1,5 +1,5 @@
-import React from "react";
-import { useQuery, gql } from "@apollo/client";
+import React from "react"
+import { useQuery, gql } from "@apollo/client"
 
 export function ElegibilityCheck({ stakingProvider, block }) {
   const OPERATOR_QUERY = gql`
@@ -13,7 +13,7 @@ export function ElegibilityCheck({ stakingProvider, block }) {
         operator
       }
     }
-  `;
+  `
 
   // Since Delegation is not a requirements for bonus anymore,
   //  this query is not necessary by the moment.
@@ -31,19 +31,19 @@ export function ElegibilityCheck({ stakingProvider, block }) {
 
   const { loading, error, data } = useQuery(OPERATOR_QUERY, {
     variables: { stakingProvider, block },
-  });
+  })
   // const { loading: loadingDele, error: errorDele, data: dataDele } = useQuery(DELEGATION_QUERY, {variables: {stakingProvider}});
   // if (loading || loadingDele) return <div>Loading...</div>;
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>
   // if (error || errorDele) return <div>Error</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error: {error.message}</div>
 
-  let operator = "";
-  let operatorCheck = "❌";
+  let operator = ""
+  let operatorCheck = "❌"
 
   if (data.confirmedOperators.length !== 0) {
-    operator = data.confirmedOperators[0].operator;
-    operatorCheck = "✅";
+    operator = data.confirmedOperators[0].operator
+    operatorCheck = "✅"
   }
 
   // let delegate = ''
@@ -64,5 +64,5 @@ export function ElegibilityCheck({ stakingProvider, block }) {
       {/* <div>{delegateCheck} Voting power delegate: {delegate}</div> */}
       <div></div>
     </div>
-  );
+  )
 }

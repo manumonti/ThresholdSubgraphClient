@@ -1,5 +1,5 @@
-import React from "react";
-import { ElegibilityCheck } from "./ElegibilityCheck";
+import React from "react"
+import { ElegibilityCheck } from "./ElegibilityCheck"
 
 export function StakeItem({ stake, block }) {
   return (
@@ -11,5 +11,5 @@ export function StakeItem({ stake, block }) {
         <ElegibilityCheck stakingProvider={stake.stakeData.id} block={block} />
       </li>
     </div>
-  );
+  )
 }
