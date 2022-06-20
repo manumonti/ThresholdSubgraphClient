@@ -1,16 +1,15 @@
 import React from "react"
 import { Fragment, useState, useRef } from "react"
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
-import { StakeList } from "./components/BonusElegibility/StakeList"
+import { BonusStakeList } from "./components/BonusElegibility/BonusStakeList"
 import { ConfirmedOperatorsData } from "./components/ConfirmedOperators/ConfirmedOperatorsData"
 
 const gplClient = new ApolloClient({
-  uri: "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.4",
+  uri: "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.5",
   cache: new InMemoryCache(),
 })
 
 const TIMESTAMP = "1654041600" // Jun 1 2022 00:00:00 GMT
-const BLOCK = 14881677 // The first mined block after TIMESTAMP
 
 export function App() {
   const stakingAddressRef = useRef()
@@ -25,7 +24,8 @@ export function App() {
   return (
     <Fragment>
       <ApolloProvider client={gplClient}>
-        <h1>Bonus Elegibility (June 1st)</h1>
+        <h1>Threshold Network Staking</h1>
+        <h2>Bonus Elegibility (June 1st)</h2>
         <input
           ref={stakingAddressRef}
           type="text"
@@ -33,13 +33,9 @@ export function App() {
           placeholder="Staking address (owner)"
         />
         <button onClick={handleStakingCheck}>Check</button>
-        <StakeList
-          ownerAddress={ownerAddress}
-          timestamp={TIMESTAMP}
-          block={BLOCK}
-        />
-        <h1>Stakers with confirmed operator (June 1st)</h1>
-        <ConfirmedOperatorsData timestamp={TIMESTAMP} block={BLOCK} />
+        <BonusStakeList ownerAddress={ownerAddress} timestamp={TIMESTAMP} />
+        <h2>Bonus elegible stakers (June 1st)</h2>
+        <ConfirmedOperatorsData timestamp={TIMESTAMP} block={TIMESTAMP} />
       </ApolloProvider>
     </Fragment>
   )

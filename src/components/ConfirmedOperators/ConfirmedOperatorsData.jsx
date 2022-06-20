@@ -1,5 +1,5 @@
 import React from "react"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { ethers } from "ethers"
 import { useQuery, gql } from "@apollo/client"
 import { StakerWithOperatorList } from "./StakerWithOperatorList"
@@ -14,107 +14,118 @@ export function ConfirmedOperatorsData({ timestamp, block }) {
   // Todo: Max amount of items you can get in a query is 100.
   // adding 'first: 1000' is a WA to get more than 100 stakes,
   // but the most correct option is to use GraphQL pagination.
-  const STAKERS_QUERY = gql`
-    query GetStakers($timestamp: String) {
+  const BONUS_STAKES_QUERY = gql`
+    query BonusStakes($timestamp: String) {
       epoches(
-        orderBy: startTime
-        orderDirection: desc
         first: 1
-        where: { startTime_lte: $timestamp }
+        orderBy: timestamp
+        orderDirection: desc
+        where: { timestamp_lte: $timestamp }
       ) {
-        totalStaked
+        totalAmount
         stakes(first: 1000) {
+          stakingProvider
+          owner
           amount
-          stakeData {
-            id
-            owner {
-              id
-            }
-          }
         }
       }
     }
   `
 
-  const OPERATOR_QUERY = gql`
-    query GetOperators($block: Int) {
-      confirmedOperators(first: 1000, block: { number: $block }) {
-        stakingProvider
+  const SIMPLE_PRE_APPS_QUERY = gql`
+    query SimplePREApplications($timestamp: String) {
+      simplePREApplications(
+        first: 1000
+        where: { confirmedTimestamp_lte: $timestamp }
+      ) {
+        operator
+        stake {
+          id
+        }
       }
     }
   `
 
-  const { loading, error, data } = useQuery(STAKERS_QUERY, {
+  const {
+    loading: loadingSt,
+    error: errorSt,
+    data: dataSt,
+  } = useQuery(BONUS_STAKES_QUERY, {
     variables: { timestamp },
   })
   const {
-    loading: loadingOp,
-    error: errorOp,
-    data: dataOp,
-  } = useQuery(OPERATOR_QUERY, { variables: { block } })
+    loading: loadingPRE,
+    error: errorPRE,
+    data: dataPRE,
+  } = useQuery(SIMPLE_PRE_APPS_QUERY, { variables: { timestamp } })
 
-  if (loading || loadingOp) return <div>Loading...</div>
-  if (error || errorOp)
+  if (loadingSt || loadingPRE) return <div>Loading...</div>
+  if (errorSt || errorPRE)
     return (
       <div>
-        Error: {error.message} {errorOp.message}
+        Error: {errorSt?.message} {errorPRE?.message}
       </div>
     )
 
-  // Stake list from Staking events
-  const stakeList = data.epoches[0].stakes
-  // Staking Provider list from Confirmed Operators events
-  const stakingProvWithConfOpList = dataOp.confirmedOperators.map(
-    (operator) => operator.stakingProvider
+  // Stakes list
+  const stakeList = dataSt.epoches[0].stakes
+  // Simple PRE App list
+  const preAppList = dataPRE.simplePREApplications
+
+  // Stakes with confirmed operators list
+  const stakeWithConfOperList = stakeList.filter((stake) =>
+    preAppList.map((preApp) => preApp.stake.id).includes(stake.stakingProvider)
   )
-
-  const stakeWithConfOpList = stakeList.filter(
-    (stake) => stakingProvWithConfOpList.indexOf(stake.stakeData.id) >= 0
-  )
-
-  const totalStaked = ethers.BigNumber.from(data.epoches[0].totalStaked)
-  const amountList = stakeWithConfOpList.map((stake) =>
-    ethers.BigNumber.from(stake.amount)
-  )
-  let tokenAmount = ethers.BigNumber.from(0)
-  for (let i = 0; i < amountList.length; i++) {
-    tokenAmount = tokenAmount.add(amountList[i])
-  }
-
-  const tokenAmountEther = tokenAmount.div(ethers.BigNumber.from(10).pow(18))
-  const totalStakedEther = totalStaked.div(ethers.BigNumber.from(10).pow(18))
-
-  const stakersOpConfirmedPercentaje = (
-    (stakeWithConfOpList.length / stakeList.length) *
+  const stakersConfOperPerc = (
+    (stakeWithConfOperList.length / stakeList.length) *
     100
   ).toFixed(2)
+
+  // Tokens staked in the epoch
+  const totalStakedInEpoch = ethers.BigNumber.from(
+    dataSt.epoches[0].totalAmount
+  )
+  // Token stake amount list
+  const stakeAmountList = stakeWithConfOperList.map((stake) =>
+    ethers.BigNumber.from(stake.amount)
+  )
+  // Tokens staked by stakers with confirmed operator
+  let totalStakedConfOper = stakeAmountList.reduce((a, b) => a.add(b))
+
+  const totalStakedInEpochEther = totalStakedInEpoch.div(
+    ethers.BigNumber.from(10).pow(18)
+  )
+  const totalStakedConfOperEther = totalStakedConfOper.div(
+    ethers.BigNumber.from(10).pow(18)
+  )
   const stakesOpConfirmedPercentaje = (
-    (tokenAmountEther.toNumber() / totalStakedEther.toNumber()) *
+    (totalStakedConfOperEther.toNumber() / totalStakedInEpochEther.toNumber()) *
     100
   ).toFixed(2)
 
   return (
-    <div>
+    <Fragment>
       <div>Number of stakes with Confirmed Operator:</div>
       <div>
-        {stakeWithConfOpList.length} of {stakeList.length} (
-        {stakersOpConfirmedPercentaje}%)
+        {stakeWithConfOperList.length} of {stakeList.length} (
+        {stakersConfOperPerc}%)
       </div>
       <div>
         Number of tokens staked by Confirmed Operator stakers (T, Nu & Keep):
       </div>
       <div>
-        {tokenAmountEther.toString()} of {totalStakedEther.toString()} (
+        {totalStakedConfOperEther.toString()} of{" "}
+        {totalStakedInEpochEther.toString()} (
         {stakesOpConfirmedPercentaje.toString()}%)
       </div>
       <h3>List of stakers with confirmed operator:</h3>
       <button onClick={handleShow}>Show</button>
       {showState && (
         <StakerWithOperatorList
-          totalStaked={totalStaked}
-          stakeWithConfOpList={stakeWithConfOpList}
+          totalStaked={totalStakedInEpoch}
+          stakeWithConfOperList={stakeWithConfOperList}
         />
       )}
-    </div>
+    </Fragment>
   )
 }
