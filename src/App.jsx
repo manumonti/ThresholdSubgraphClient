@@ -5,7 +5,7 @@ import { StakeList } from "./components/BonusElegibility/StakeList"
 import { ConfirmedOperatorsData } from "./components/ConfirmedOperators/ConfirmedOperatorsData"
 
 const gplClient = new ApolloClient({
-  uri: "https://api.studio.thegraph.com/query/24143/threshold/0.0.4",
+  uri: "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.4",
   cache: new InMemoryCache(),
 })
 
