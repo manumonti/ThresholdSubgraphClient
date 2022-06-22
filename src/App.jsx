@@ -84,7 +84,7 @@ export function App() {
               ref={ongoingStartDateRef}
               id="startDate"
               type="date"
-              min="2022-01-31"
+              min="2022-06-01"
             />
             <input ref={ongoingStartTimeRef} type="time" />
           </div>
@@ -94,7 +94,7 @@ export function App() {
               ref={ongoingEndDateRef}
               id="endDate"
               type="date"
-              min="2022-01-31"
+              min="2022-06-01"
             />
             <input ref={ongoingEndTimeRef} type="time" />
           </div>
