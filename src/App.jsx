@@ -3,6 +3,7 @@ import { Fragment, useState, useRef } from "react"
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
 import { BonusStakeList } from "./components/BonusElegibility/BonusStakeList"
 import { ConfirmedOperatorsData } from "./components/ConfirmedOperators/ConfirmedOperatorsData"
+import { OngoingRewardsList } from "./components/OngoingRewards/OngoingRewardsList"
 
 const gplClient = new ApolloClient({
   uri: "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.5",
@@ -12,30 +13,97 @@ const gplClient = new ApolloClient({
 const TIMESTAMP = "1654041600" // Jun 1 2022 00:00:00 GMT
 
 export function App() {
-  const stakingAddressRef = useRef()
-  const [ownerAddress, setOwnerAddress] = useState("")
+  const bonusAddressRef = useRef()
+  const ongoingAddressRef = useRef()
+  const ongoingStartDateRef = useRef()
+  const ongoingEndDateRef = useRef()
+  const ongoingStartTimeRef = useRef()
+  const ongoingEndTimeRef = useRef()
+  const [bonusAddress, setBonusAddress] = useState("")
+  const [ongoingAddress, setOngoingAddress] = useState("")
+  const [ongoingStartTimestamp, setOngoingStartTimestamp] = useState("")
+  const [ongoingEndTimestamp, setOngoingEndTimestamp] = useState("")
 
-  const handleStakingCheck = () => {
-    const address = stakingAddressRef.current.value
+  const handleBonusCheck = () => {
+    const address = bonusAddressRef.current.value
     if (address === "") return
-    setOwnerAddress(address.toLowerCase())
+    setBonusAddress(address.toLowerCase())
+  }
+
+  const handleOngoingCalc = () => {
+    const address = ongoingAddressRef.current.value
+    const startDate = ongoingStartDateRef.current.value
+    const startTime = ongoingStartTimeRef.current.value
+    const endDate = ongoingEndDateRef.current.value
+    const endTime = ongoingEndTimeRef.current.value
+    const startTimestamp = (
+      new Date(`${startDate} ${startTime} GMT`).getTime() / 1000
+    ).toString()
+    const endTimestamp = (
+      new Date(`${endDate} ${endTime} GMT`).getTime() / 1000
+    ).toString()
+    if (address === "" || !startTimestamp || !endTimestamp) return
+    setOngoingAddress(address.toLowerCase())
+    setOngoingStartTimestamp(startTimestamp)
+    setOngoingEndTimestamp(endTimestamp)
   }
 
   return (
     <Fragment>
       <ApolloProvider client={gplClient}>
         <h1>Threshold Network Staking</h1>
-        <h2>Bonus Elegibility (June 1st)</h2>
-        <input
-          ref={stakingAddressRef}
-          type="text"
-          size="42"
-          placeholder="Staking address (owner)"
-        />
-        <button onClick={handleStakingCheck}>Check</button>
-        <BonusStakeList ownerAddress={ownerAddress} timestamp={TIMESTAMP} />
-        <h2>Bonus elegible stakers (June 1st)</h2>
-        <ConfirmedOperatorsData timestamp={TIMESTAMP} block={TIMESTAMP} />
+        <div>
+          <h2>Bonus Elegibility (June 1st)</h2>
+          <input
+            ref={bonusAddressRef}
+            type="text"
+            size="42"
+            placeholder="Staking address (owner)"
+          />
+          <button onClick={handleBonusCheck}>Check</button>
+          <BonusStakeList address={bonusAddress} timestamp={TIMESTAMP} />
+        </div>
+        <div>
+          <h2>Bonus elegible stakers (June 1st)</h2>
+          <ConfirmedOperatorsData timestamp={TIMESTAMP} block={TIMESTAMP} />
+        </div>
+        <div>
+          <h2>Ongoing rewards</h2>
+          <div>
+            <input
+              ref={ongoingAddressRef}
+              type="text"
+              size="42"
+              placeholder="Staking address (owner)"
+            />
+          </div>
+          <div>
+            <label>Start date: </label>
+            <input
+              ref={ongoingStartDateRef}
+              id="startDate"
+              type="date"
+              min="2022-01-31"
+            />
+            <input ref={ongoingStartTimeRef} type="time" />
+          </div>
+          <div>
+            <label>End date: </label>
+            <input
+              ref={ongoingEndDateRef}
+              id="endDate"
+              type="date"
+              min="2022-01-31"
+            />
+            <input ref={ongoingEndTimeRef} type="time" />
+          </div>
+          <button onClick={handleOngoingCalc}>Calculate</button>
+          <OngoingRewardsList
+            address={ongoingAddress}
+            startTimestamp={ongoingStartTimestamp}
+            endTimestamp={ongoingEndTimestamp}
+          />
+        </div>
       </ApolloProvider>
     </Fragment>
   )
