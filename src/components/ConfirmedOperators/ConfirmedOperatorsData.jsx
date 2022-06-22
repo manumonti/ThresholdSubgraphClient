@@ -111,13 +111,15 @@ export function ConfirmedOperatorsData({ timestamp, block }) {
         {stakersConfOperPerc}%)
       </div>
       <div>
-        Number of tokens staked by Confirmed Operator stakers (T, Nu & Keep):
+        Number of tokens staked by Confirmed Operator stakers:
       </div>
       <div>
         {totalStakedConfOperEther.toString()} of{" "}
         {totalStakedInEpochEther.toString()} (
         {stakesOpConfirmedPercentaje.toString()}%)
       </div>
+      <small>in Ether Unit (10^18)</small>
+      <div></div>
       <h3>List of stakers with confirmed operator:</h3>
       <button onClick={handleShow}>Show</button>
       {showState && (

@@ -4,6 +4,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
 import { BonusStakeList } from "./components/BonusElegibility/BonusStakeList"
 import { ConfirmedOperatorsData } from "./components/ConfirmedOperators/ConfirmedOperatorsData"
 import { OngoingRewardsList } from "./components/OngoingRewards/OngoingRewardsList"
+import { OngoingRewardsStats } from "./components/OngoingRewardsStats/OngoingRewardsStats"
 
 const gplClient = new ApolloClient({
   uri: "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.5",
@@ -53,7 +54,7 @@ export function App() {
       <ApolloProvider client={gplClient}>
         <h1>Threshold Network Staking</h1>
         <div>
-          <h2>Bonus Elegibility (June 1st)</h2>
+          <h2>Bonus elegibility (June 1st)</h2>
           <input
             ref={bonusAddressRef}
             type="text"
@@ -64,7 +65,7 @@ export function App() {
           <BonusStakeList address={bonusAddress} timestamp={TIMESTAMP} />
         </div>
         <div>
-          <h2>Bonus elegible stakers (June 1st)</h2>
+          <h2>Bonus elegibility stats (June 1st)</h2>
           <ConfirmedOperatorsData timestamp={TIMESTAMP} block={TIMESTAMP} />
         </div>
         <div>
@@ -103,6 +104,10 @@ export function App() {
             startTimestamp={ongoingStartTimestamp}
             endTimestamp={ongoingEndTimestamp}
           />
+        </div>
+        <div>
+          <h2>Ongoing rewards stats (June 1st to Now) </h2>
+          <OngoingRewardsStats timestamp={TIMESTAMP} />
         </div>
       </ApolloProvider>
     </Fragment>

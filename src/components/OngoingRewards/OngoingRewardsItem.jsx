@@ -33,9 +33,12 @@ export function OngoingRewardsItem({ stake }) {
     return total.add(epochReward)
   }, BigNumber.from(0))
 
+  const rewardInEther = reward.div(BigNumber.from(10).pow(18))
+
   return (
     <div>
-      <div>Rewards: {reward.toString()}</div>
+      <div>Rewards: {rewardInEther.toString()}</div>
+      <small>in Ether Unit (10^18)</small>
     </div>
   )
 }
