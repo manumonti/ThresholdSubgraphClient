@@ -35,13 +35,17 @@ export function App() {
     const address = ongoingAddressRef.current.value
     const startDate = ongoingStartDateRef.current.value
     const startTime = ongoingStartTimeRef.current.value
+      ? ongoingStartTimeRef.current.value
+      : "00:00"
     const endDate = ongoingEndDateRef.current.value
     const endTime = ongoingEndTimeRef.current.value
+      ? ongoingEndTimeRef.current.value
+      : "00:00"
     const startTimestamp = (
-      new Date(`${startDate} ${startTime} GMT`).getTime() / 1000
+      new Date(`${startDate}T${startTime}+00:00`).getTime() / 1000
     ).toString()
     const endTimestamp = (
-      new Date(`${endDate} ${endTime} GMT`).getTime() / 1000
+      new Date(`${endDate}T${endTime}+00:00`).getTime() / 1000
     ).toString()
     if (address === "" || !startTimestamp || !endTimestamp) return
     setOngoingAddress(address.toLowerCase())

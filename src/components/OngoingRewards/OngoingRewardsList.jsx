@@ -37,7 +37,5 @@ export function OngoingRewardsList({ address, startTimestamp, endTimestamp }) {
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error {error.message}</div>
 
-  return (
-    <OngoingRewardsFilterList queryData={data} address={address} />
-  )
+  return <OngoingRewardsFilterList queryData={data} address={address} />
 }

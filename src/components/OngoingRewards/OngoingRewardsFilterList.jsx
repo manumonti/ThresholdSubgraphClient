@@ -4,7 +4,7 @@ import { useQuery, gql } from "@apollo/client"
 import { OngoingRewardsItem } from "./OngoingRewardsItem"
 
 export function OngoingRewardsFilterList({ queryData, address }) {
-  // The ongoing stakes query leaves out start date epoch so let's include it
+  // The ongoing stakes query leaves out the first epoch so let's include it
   const FIRST_EPOCH_QUERY = gql`
     query FirstEpoch($id: String, $address: String) {
       epoch(id: $id) {
