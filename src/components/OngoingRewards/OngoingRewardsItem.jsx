@@ -19,17 +19,16 @@ export function OngoingRewardsItem({ stake }) {
   // const stakeAreaConverted = areas.stakeArea.mul(BigNumber.from(10).pow(8))
   // const participation = (stakeAreaConverted.div(areas.epochArea).toNumber())/10 ** 8
 
+  // Rewards formula: r = (s_1 * y_t) * t / 365; where y_t is 0.15
   const reward = stake.reduce((total, epochStake) => {
     const stakeAmount = BigNumber.from(epochStake.amount)
     const epochDuration = epochStake.epochDuration
       ? BigNumber.from(epochStake.epochDuration)
       : currentTime.sub(BigNumber.from(epochStake.epochTimestamp))
     const epochReward = stakeAmount
-      .mul(BigNumber.from(115))
-      .div(BigNumber.from(100))
-      .sub(stakeAmount)
+      .mul(BigNumber.from(15))
       .mul(epochDuration)
-      .div(secondsInAYear)
+      .div(secondsInAYear.mul(BigNumber.from(100)))
     return total.add(epochReward)
   }, BigNumber.from(0))
 

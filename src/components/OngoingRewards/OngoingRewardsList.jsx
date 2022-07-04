@@ -1,6 +1,6 @@
 import React from "react"
 import { useQuery, gql } from "@apollo/client"
-import { OngoingRewardsFilterList } from "./OngoingRewardsFilterList"
+import { OngoingRewardsListFiltered } from "./OngoingRewardsListFiltered"
 
 export function OngoingRewardsList({ address, startTimestamp, endTimestamp }) {
   // TODO: Max amount of items you can get in a query is 100.
@@ -18,8 +18,8 @@ export function OngoingRewardsList({ address, startTimestamp, endTimestamp }) {
         where: { timestamp_gte: $startTimestamp, timestamp_lte: $endTimestamp }
       ) {
         id
-        duration
         timestamp
+        duration
         totalAmount
         stakes(first: 1000, where: { owner: $address }) {
           amount
@@ -37,5 +37,12 @@ export function OngoingRewardsList({ address, startTimestamp, endTimestamp }) {
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error {error.message}</div>
 
-  return <OngoingRewardsFilterList queryData={data} address={address} />
+  return (
+    <OngoingRewardsListFiltered
+      queryData={data}
+      address={address}
+      startTimestamp={startTimestamp}
+      endTimestamp={endTimestamp}
+    />
+  )
 }
