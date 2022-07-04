@@ -74,6 +74,10 @@ export function App() {
         </div>
         <div>
           <h2>Ongoing rewards</h2>
+          <small>
+            Note: this calculation doesn't take into account if operators are
+            confirmed (yet)
+          </small>
           <div>
             <input
               ref={ongoingAddressRef}
@@ -111,6 +115,10 @@ export function App() {
         </div>
         <div>
           <h2>Ongoing rewards stats (June 1st to Now) </h2>
+          <small>
+            Note: this calculation doesn't take into account if operators are
+            confirmed (yet)
+          </small>
           <OngoingRewardsStats timestamp={TIMESTAMP} />
         </div>
       </ApolloProvider>

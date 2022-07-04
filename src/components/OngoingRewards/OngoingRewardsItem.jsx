@@ -4,6 +4,7 @@ import { BigNumber } from "ethers"
 export function OngoingRewardsItem({ stake }) {
   const currentTime = BigNumber.from(parseInt(Date.now() / 1000))
   const secondsInAYear = BigNumber.from(31536000)
+  const decimals = BigNumber.from(10).pow(18)
 
   //   const areas = stake.reduce( (total, epochStake) => {
   //   const epochDuration = BigNumber.from(epochStake.epochDuration)
@@ -32,11 +33,12 @@ export function OngoingRewardsItem({ stake }) {
     return total.add(epochReward)
   }, BigNumber.from(0))
 
-  const rewardInEther = reward.div(BigNumber.from(10).pow(18))
+  const rewardInEther = reward.div(decimals)
+  const rewardsDecimal = reward.sub(rewardInEther.mul(decimals))
 
   return (
     <div>
-      <div>Rewards: {rewardInEther.toString()}</div>
+      <div>Rewards: {rewardInEther.toString()}.{rewardsDecimal.toString()}</div>
       <small>in Ether Unit (10^18)</small>
     </div>
   )

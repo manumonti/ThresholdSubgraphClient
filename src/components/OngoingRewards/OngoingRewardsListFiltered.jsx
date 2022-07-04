@@ -42,8 +42,8 @@ export function OngoingRewardsListFiltered({
   let epochs = [data.epoch, ...queryData.epoches]
 
   const lastEpochIndex = epochs.length - 1 > 0 ? epochs.length - 1 : 0
-  const firstEpochDuration = BigNumber.from(startTimestamp).sub(
-    BigNumber.from(epochs[0].timestamp)
+  const firstEpochDuration = BigNumber.from(epochs[1].timestamp).sub(
+    BigNumber.from(startTimestamp)
   )
   const lastEpochDuration = BigNumber.from(endTimestamp).sub(
     BigNumber.from(epochs[lastEpochIndex].timestamp)
@@ -51,6 +51,7 @@ export function OngoingRewardsListFiltered({
   const firstEpoch = structuredClone(epochs[0])
   const lastEpoch = structuredClone(epochs[lastEpochIndex])
   firstEpoch.duration = firstEpochDuration.toString()
+  firstEpoch.timestamp = startTimestamp
   lastEpoch.duration = lastEpochDuration.toString()
   epochs[0] = firstEpoch
   epochs[lastEpochIndex] = lastEpoch

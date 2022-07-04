@@ -35,10 +35,11 @@ export function OngoingRewardsStatsCalc({ queryData, startTimestamp }) {
 
   let epochs = [data.epoch, ...queryData.epoches]
 
-  const firstEpochDuration = BigNumber.from(startTimestamp).sub(
-    BigNumber.from(epochs[0].timestamp)
+  const firstEpochDuration = BigNumber.from(epochs[1].timestamp).sub(
+    BigNumber.from(startTimestamp)
   )
   const firstEpoch = structuredClone(epochs[0])
+  firstEpoch.timestamp = startTimestamp
   firstEpoch.duration = firstEpochDuration.toString()
   epochs[0] = firstEpoch
 
