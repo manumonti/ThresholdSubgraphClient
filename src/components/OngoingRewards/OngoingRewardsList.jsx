@@ -1,48 +1,39 @@
 import React from "react"
-import { useQuery, gql } from "@apollo/client"
-import { OngoingRewardsListFiltered } from "./OngoingRewardsListFiltered"
+import { Fragment } from "react"
+import { useState, useEffect } from "react"
+import BigNumber from "bignumber.js"
+import { getOngoingRewards } from "@manumonti/staking-rewards-calculation"
 
 export function OngoingRewardsList({ address, startTimestamp, endTimestamp }) {
-  // TODO: Max amount of items you can get in a query is 100.
-  // adding 'first: 1000' is a WA to get more than 100 stakes,
-  // but the most correct option is to use GraphQL pagination.
-  const ONGOING_STAKES_QUERY = gql`
-    query OngoingStakes(
-      $address: String
-      $startTimestamp: String
-      $endTimestamp: String
-    ) {
-      epoches(
-        first: 1000
-        orderBy: timestamp
-        where: { timestamp_gte: $startTimestamp, timestamp_lte: $endTimestamp }
-      ) {
-        id
-        timestamp
-        duration
-        totalAmount
-        stakes(first: 1000, where: { owner: $address }) {
-          amount
-          stakingProvider
-        }
-      }
-    }
-  `
+  const decimals = new BigNumber(1e18)
+  const [rewards, setRewards] = useState(null)
 
-  const { loading, error, data } = useQuery(ONGOING_STAKES_QUERY, {
-    variables: { address, startTimestamp, endTimestamp },
+  const getRewards = async () => {
+    setRewards(await getOngoingRewards(address, parseInt(startTimestamp), parseInt(endTimestamp)))
+  }
+
+  useEffect(() => {
+    if (address && !rewards) {
+      getRewards()
+    }
   })
 
   if (!address) return <div></div>
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error {error.message}</div>
+  if (!rewards) return <div>Loading...</div>
 
   return (
-    <OngoingRewardsListFiltered
-      queryData={data}
-      address={address}
-      startTimestamp={startTimestamp}
-      endTimestamp={endTimestamp}
-    />
+    <Fragment>
+      <ul>
+        {rewards.map(stake => {
+          return (
+            <li key={stake.stakingProvider}>
+              <strong>Staking Provider: {stake.stakingProvider}</strong>
+              <div>Reward: {stake.reward.div(decimals).toFixed()}</div>
+              <small>in Ether units (10^18)</small>
+            </li>
+          )
+        })}
+      </ul>
+    </Fragment>
   )
 }
