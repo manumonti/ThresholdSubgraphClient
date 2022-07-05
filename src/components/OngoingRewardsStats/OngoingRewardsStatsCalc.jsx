@@ -43,7 +43,7 @@ export function OngoingRewardsStatsCalc({ queryData, startTimestamp }) {
   firstEpoch.duration = firstEpochDuration.toString()
   epochs[0] = firstEpoch
 
-  const reward = queryData.epoches.reduce((total, epoch) => {
+  const reward = epochs.reduce((total, epoch) => {
     const amount = BigNumber.from(epoch.totalAmount)
     const duration = epoch.duration
       ? BigNumber.from(epoch.duration)
