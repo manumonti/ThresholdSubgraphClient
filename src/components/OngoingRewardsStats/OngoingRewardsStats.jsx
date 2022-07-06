@@ -4,12 +4,12 @@ import { useState, useEffect } from "react"
 import BigNumber from "bignumber.js"
 import { getTotalOngoingRewards } from "@manumonti/staking-rewards-calculation"
 
-export function OngoingRewardsStats({ timestamp }) {
+export function OngoingRewardsStats({ gqlUrl, timestamp }) {
   const decimals = new BigNumber(1e18)
   const [reward, setReward] = useState(null)
 
   const getReward = async () => {
-    setReward(await getTotalOngoingRewards(timestamp))
+    setReward(await getTotalOngoingRewards(gqlUrl, timestamp))
   }
 
   useEffect(() => {

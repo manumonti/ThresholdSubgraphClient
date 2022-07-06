@@ -1795,9 +1795,9 @@
   integrity sha512-nkalE/f1RvRGChwBnEIoBfSEYOXnCRdleKuv6+lePbMDrMZXeDQnqak5XDOeBgrPPyPfAdcCu/B5z+v3VhplGg==
 
 "@manumonti/staking-rewards-calculation@^1.0.0":
-  version "1.0.41"
-  resolved "https://registry.yarnpkg.com/@manumonti/staking-rewards-calculation/-/staking-rewards-calculation-1.0.41.tgz#c6d2a700476e01a230bbc9a31e3bf08841432aca"
-  integrity sha512-ewy9UPvL5OAeF7pPNcHy3yDdhAn2Fu4p7uQGKvwonpyOqwqbmEnQr51Okzc32eBnvyGpc23sIL40UlbEVevimw==
+  version "1.0.42"
+  resolved "https://registry.yarnpkg.com/@manumonti/staking-rewards-calculation/-/staking-rewards-calculation-1.0.42.tgz#1c4081f6069f6187ca489d34457aaa7b92efbc8a"
+  integrity sha512-iAOYs4RtapeY85lZqETLUCIvyyRhYb+6Ng+zLSHJ3k4ZzSzon7LlgRzVF80oP7b2CCOyDEiqP9K26BeoZQlISQ==
   dependencies:
     "@urql/core" "^2.5.0"
     bignumber.js "^9.0.2"

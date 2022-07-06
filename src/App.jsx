@@ -6,12 +6,14 @@ import { ConfirmedOperatorsData } from "./components/ConfirmedOperators/Confirme
 import { OngoingRewardsList } from "./components/OngoingRewards/OngoingRewardsList"
 import { OngoingRewardsStats } from "./components/OngoingRewardsStats/OngoingRewardsStats"
 
+const TIMESTAMP = "1654041600" // Jun 1 2022 00:00:00 GMT
+const GQLURL =
+  "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.5"
+
 const gplClient = new ApolloClient({
-  uri: "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.5",
+  uri: GQLURL,
   cache: new InMemoryCache(),
 })
-
-const TIMESTAMP = "1654041600" // Jun 1 2022 00:00:00 GMT
 
 export function App() {
   const bonusAddressRef = useRef()
@@ -108,6 +110,7 @@ export function App() {
           </div>
           <button onClick={handleOngoingCalc}>Calculate</button>
           <OngoingRewardsList
+            gqlUrl={GQLURL}
             address={ongoingAddress}
             startTimestamp={ongoingStartTimestamp}
             endTimestamp={ongoingEndTimestamp}
@@ -119,7 +122,7 @@ export function App() {
             Note: this calculation doesn't take into account if operators are
             confirmed (yet)
           </small>
-          <OngoingRewardsStats timestamp={TIMESTAMP} />
+          <OngoingRewardsStats gqlUrl={GQLURL} timestamp={TIMESTAMP} />
         </div>
       </ApolloProvider>
     </Fragment>
