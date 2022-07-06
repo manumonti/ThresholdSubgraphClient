@@ -76,10 +76,6 @@ export function App() {
         </div>
         <div>
           <h2>Ongoing rewards</h2>
-          <small>
-            Note: this calculation doesn't take into account if operators are
-            confirmed (yet)
-          </small>
           <div>
             <input
               ref={ongoingAddressRef}
