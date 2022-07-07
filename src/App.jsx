@@ -64,7 +64,7 @@ export function App() {
           <input
             ref={bonusAddressRef}
             type="text"
-            size="42"
+            size="50"
             placeholder="Staking address (owner)"
           />
           <button onClick={handleBonusCheck}>Check</button>
@@ -80,7 +80,7 @@ export function App() {
             <input
               ref={ongoingAddressRef}
               type="text"
-              size="42"
+              size="50"
               placeholder="Staking address (owner)"
             />
           </div>

@@ -1,6 +1,6 @@
 import React from "react"
 import { Fragment } from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import BigNumber from "bignumber.js"
 import { getOngoingRewards } from "@manumonti/staking-rewards-calculation"
 
@@ -12,6 +12,7 @@ export function OngoingRewardsList({
 }) {
   const decimals = new BigNumber(1e18)
   const [rewards, setRewards] = useState(null)
+  const addressRef = useRef("")
 
   const getRewards = async () => {
     setRewards(
@@ -25,12 +26,15 @@ export function OngoingRewardsList({
   }
 
   useEffect(() => {
-    if (address && !rewards) {
+    if (address && address !== addressRef.current) {
       getRewards()
+      addressRef.current = address
     }
   })
 
-  if (!address) return <div></div>
+  if (!address || startTimestamp === "NaN" || endTimestamp === "NaN") {
+    return <div></div>
+  }
   if (!rewards) return <div>Loading...</div>
 
   return (
