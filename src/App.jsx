@@ -8,7 +8,7 @@ import { OngoingRewardsStats } from "./components/OngoingRewardsStats/OngoingRew
 
 const TIMESTAMP = "1654041600" // Jun 1 2022 00:00:00 GMT
 const GQLURL =
-  "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.5"
+  "https://api.studio.thegraph.com/query/24143/main-threshold-subgraph/0.0.6"
 
 const gplClient = new ApolloClient({
   uri: GQLURL,
